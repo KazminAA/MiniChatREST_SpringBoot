@@ -1,14 +1,21 @@
 package com.minichat.models;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
-/**
- * Created by lex on 23.01.17.
- */
+@Entity
+@Table(name = "messages")
 public class Message {
+    @Id
+    @GeneratedValue
+    @Column(name = "ID")
     private long id;
+    @Column(name = "messtext")
     private String messageText;
+    @ManyToOne
+    @JoinColumn(name = "user_ID", referencedColumnName = "ID")
     private User user;
+    @Column(name = "timestamp")
     private LocalDateTime timestamp;
 
     public Message() {

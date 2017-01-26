@@ -1,14 +1,28 @@
 package com.minichat.models;
 
-/**
- * Created by lex on 23.01.17.
- */
+import javax.persistence.*;
+
+@Entity
+@Table(name = "user", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "login"),
+        @UniqueConstraint(columnNames = "mail")
+})
 public class User {
+    @Id
+    @GeneratedValue
+    @Column(name = "ID")
     private long id;
+    @Column(name = "login", unique = true, nullable = false)
     private String login;
+    @Column(name = "name")
     private String name;
+    @Column(name = "mail", unique = true, nullable = false)
     private String mail;
+    @Column(name = "pwd", nullable = false)
     private String pwd;
+    /*@OneToMany(mappedBy = "user")
+    @OrderColumn(name = "timestamp")
+    private Message[] messages;*/
 
     public User() {
     }
@@ -59,6 +73,14 @@ public class User {
     public void setPwd(String pwd) {
         this.pwd = pwd;
     }
+
+    /*public Message[] getMessages() {
+        return messages;
+    }
+
+    public void setMessages(Message[] messages) {
+        this.messages = messages;
+    }*/
 
     @Override
     public boolean equals(Object o) {
