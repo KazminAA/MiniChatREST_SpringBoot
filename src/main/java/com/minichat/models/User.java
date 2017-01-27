@@ -1,6 +1,7 @@
 package com.minichat.models;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "user", uniqueConstraints = {
@@ -20,9 +21,9 @@ public class User {
     private String mail;
     @Column(name = "pwd", nullable = false)
     private String pwd;
-    /*@OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     @OrderColumn(name = "timestamp")
-    private Message[] messages;*/
+    private Collection<Message> messages;
 
     public User() {
     }
@@ -74,13 +75,13 @@ public class User {
         this.pwd = pwd;
     }
 
-    /*public Message[] getMessages() {
+    public Collection<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(Message[] messages) {
+    public void setMessages(Collection<Message> messages) {
         this.messages = messages;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {
