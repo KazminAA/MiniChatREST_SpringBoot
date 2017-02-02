@@ -21,9 +21,9 @@ public class User {
     private String mail;
     @Column(name = "pwd", nullable = false)
     private String pwd;
-    @OneToMany(mappedBy = "user")
+   /* @OneToMany(mappedBy = "user")
     @OrderColumn(name = "timestamp")
-    private Collection<Message> messages;
+    private Collection<Message> messages;*/
 
     public User() {
     }
@@ -75,13 +75,13 @@ public class User {
         this.pwd = pwd;
     }
 
-    public Collection<Message> getMessages() {
+    /*public Collection<Message> getMessages() {
         return messages;
     }
 
     public void setMessages(Collection<Message> messages) {
         this.messages = messages;
-    }
+    }*/
 
     @Override
     public boolean equals(Object o) {

@@ -1,5 +1,6 @@
 package com.minichat.controllers;
 
+import com.minichat.models.Message;
 import com.minichat.models.User;
 import com.minichat.repositories.MessageRepository;
 import com.minichat.repositories.UserRepository;
@@ -8,6 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/chat")
@@ -27,5 +30,10 @@ public class ChatController {
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = "application/json")
     public User getUserById(@PathVariable long id) {
         return userRepository.findOne(id);
+    }
+
+    @RequestMapping(value = "/messages", method = RequestMethod.GET, produces = "application/json")
+    public List<Message> getLastMessages() {
+        return messageRepository.findeLastTwentyOrderByIdDesc();
     }
 }
