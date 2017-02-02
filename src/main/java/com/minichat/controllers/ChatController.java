@@ -5,6 +5,8 @@ import com.minichat.models.User;
 import com.minichat.repositories.MessageRepository;
 import com.minichat.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,7 +35,12 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/messages", method = RequestMethod.GET, produces = "application/json")
-    public List<Message> getLastMessages() {
-        return messageRepository.findeLastTwentyOrderByIdDesc();
+    public List<Message> getLast20Messages() {
+        return messageRepository.findWithPageable(new PageRequest(0, 20, Sort.Direction.DESC, "id"));
+    }
+
+    @RequestMapping(value = "/messages/{count}", method = RequestMethod.GET, produces = "application/json")
+    public List<Message> getLastNMessages(@PathVariable int count) {
+        return messageRepository.findWithPageable(new PageRequest(0, count, Sort.Direction.DESC, "id"));
     }
 }
