@@ -1,5 +1,7 @@
 package com.minichat.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Collection;
 
@@ -14,16 +16,19 @@ public class User {
     @Column(name = "ID")
     private long id;
     @Column(name = "login", unique = true, nullable = false)
+    @JsonIgnore
     private String login;
     @Column(name = "name")
     private String name;
     @Column(name = "mail", unique = true, nullable = false)
     private String mail;
     @Column(name = "pwd", nullable = false)
+    @JsonIgnore
     private String pwd;
-   /* @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user")
     @OrderColumn(name = "timestamp")
-    private Collection<Message> messages;*/
+    @JsonIgnore
+    private Collection<Message> messages;
 
     public User() {
     }
@@ -75,13 +80,13 @@ public class User {
         this.pwd = pwd;
     }
 
-    /*public Collection<Message> getMessages() {
+    public Collection<Message> getMessages() {
         return messages;
     }
 
     public void setMessages(Collection<Message> messages) {
         this.messages = messages;
-    }*/
+    }
 
     @Override
     public boolean equals(Object o) {
