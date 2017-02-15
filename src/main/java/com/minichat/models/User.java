@@ -1,6 +1,8 @@
 package com.minichat.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.minichat.helpers.ViewProfiles;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -14,11 +16,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
+    @JsonIgnore
     private long id;
     @Column(name = "login", unique = true, nullable = false)
-    @JsonIgnore
     private String login;
     @Column(name = "name")
+    @JsonView(ViewProfiles.MessageView.class)
     private String name;
     @Column(name = "mail", unique = true, nullable = false)
     private String mail;

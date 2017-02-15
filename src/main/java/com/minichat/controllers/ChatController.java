@@ -1,5 +1,7 @@
 package com.minichat.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.minichat.helpers.ViewProfiles;
 import com.minichat.models.Message;
 import com.minichat.models.User;
 import com.minichat.repositories.MessageRepository;
@@ -34,11 +36,13 @@ public class ChatController {
         return userRepository.findOne(id);
     }
 
+    @JsonView(ViewProfiles.MessageView.class)
     @RequestMapping(value = "/messages", method = RequestMethod.GET, produces = "application/json")
     public List<Message> getLast20Messages() {
         return messageRepository.findWithPageable(new PageRequest(0, 20, Sort.Direction.DESC, "id"));
     }
 
+    @JsonView(ViewProfiles.MessageView.class)
     @RequestMapping(value = "/messages/{count}", method = RequestMethod.GET, produces = "application/json")
     public List<Message> getLastNMessages(@PathVariable int count) {
         return messageRepository.findWithPageable(new PageRequest(0, count, Sort.Direction.DESC, "id"));

@@ -1,5 +1,8 @@
 package com.minichat.models;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.minichat.helpers.ViewProfiles;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -11,11 +14,14 @@ public class Message {
     @Column(name = "ID")
     private long id;
     @Column(name = "messtext")
+    @JsonView(ViewProfiles.MessageView.class)
     private String messageText;
     @ManyToOne
     @JoinColumn(name = "user_ID", referencedColumnName = "ID")
+    @JsonView(ViewProfiles.MessageView.class)
     private User user;
     @Column(name = "timestamp")
+    @JsonView(ViewProfiles.MessageView.class)
     private LocalDateTime timestamp;
 
     public Message() {
