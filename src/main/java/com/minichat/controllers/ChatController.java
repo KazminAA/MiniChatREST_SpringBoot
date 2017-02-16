@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -31,9 +32,9 @@ public class ChatController {
         this.messageRepository = messageRepository;
     }
 
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET, produces = "application/json")
-    public User getUserById(@PathVariable long id) {
-        return userRepository.findOne(id);
+    @RequestMapping(value = "/user/{login}", method = RequestMethod.GET, produces = "application/json")
+    public User getUserByLogin(@PathVariable String login) {
+        return userRepository.findUserByLogin(login);
     }
 
     @JsonView(ViewProfiles.MessageView.class)
@@ -46,5 +47,16 @@ public class ChatController {
     @RequestMapping(value = "/messages/{count}", method = RequestMethod.GET, produces = "application/json")
     public List<Message> getLastNMessages(@PathVariable int count) {
         return messageRepository.findWithPageable(new PageRequest(0, count, Sort.Direction.DESC, "id"));
+    }
+
+    @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json")
+    public User addUser(User user) {
+        return userRepository.saveAndFlush(user);
+    }
+
+    @RequestMapping(value = "/message", method = RequestMethod.POST, consumes = "application/json")
+    public void addMessage(Message message) {
+        message.setTimestamp(LocalDateTime.now());
+        messageRepository.saveAndFlush(message);
     }
 }
