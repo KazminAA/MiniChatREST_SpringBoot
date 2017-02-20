@@ -5,6 +5,9 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.minichat.helpers.ViewProfiles;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Entity
@@ -19,14 +22,21 @@ public class User {
     @JsonIgnore
     private long id;
     @Column(name = "login", unique = true, nullable = false)
+    @NotNull
+    @Size(min = 3, max = 20)
     private String login;
     @Column(name = "name")
     @JsonView(ViewProfiles.MessageView.class)
+    @NotNull
+    @Size(min = 3, max = 30)
     private String name;
     @Column(name = "mail", unique = true, nullable = false)
+    @NotNull
+    @Pattern(regexp = "\\w+[\\-]?\\w+@\\w+[\\.{1}\\w+]+")
     private String mail;
     @Column(name = "pwd", nullable = false)
     @JsonIgnore
+    @NotNull
     private String pwd;
     @OneToMany(mappedBy = "user")
     @OrderColumn(name = "timestamp")

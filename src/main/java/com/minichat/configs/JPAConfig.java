@@ -20,6 +20,7 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+/*@EnableWebMvc*/
 @EnableAutoConfiguration(exclude = {
         org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})
 @ComponentScan(basePackages = {"com.minichat"})

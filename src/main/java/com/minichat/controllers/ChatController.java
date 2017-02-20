@@ -9,11 +9,13 @@ import com.minichat.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,8 +52,11 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = "application/json")
-    public User addUser(User user) {
-        return userRepository.saveAndFlush(user);
+    public User addUser(@Valid User user, Errors errors) {
+        if (!errors.hasErrors()) {
+            return userRepository.saveAndFlush(user);
+        }
+        return user;
     }
 
     @RequestMapping(value = "/message", method = RequestMethod.POST, consumes = "application/json")
@@ -59,4 +64,15 @@ public class ChatController {
         message.setTimestamp(LocalDateTime.now());
         messageRepository.saveAndFlush(message);
     }
+/*
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login(Model model, String error, String logout) {
+        if (error != null)
+            model.addAttribute("error", "Your username and password is invalid.");
+
+        if (logout != null)
+            model.addAttribute("message", "You have been logged out successfully.");
+
+        return "login";
+    }*/
 }
