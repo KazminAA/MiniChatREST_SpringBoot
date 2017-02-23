@@ -35,8 +35,8 @@ public class User {
     @Pattern(regexp = "\\w+[\\-]?\\w+@\\w+[\\.{1}\\w+]+")
     private String mail;
     @Column(name = "pwd", nullable = false)
-    @JsonIgnore
     @NotNull
+    @JsonIgnore
     private String pwd;
     @OneToMany(mappedBy = "user")
     @OrderColumn(name = "timestamp")
