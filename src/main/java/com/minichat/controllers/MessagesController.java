@@ -7,10 +7,7 @@ import com.minichat.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,8 +35,9 @@ public class MessagesController {
         return messageRepository.findWithPageable(new PageRequest(0, count, Sort.Direction.DESC, "id"));
     }
 
+    @JsonView(ViewProfiles.MessageViewPost.class)
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public void addMessage(Message message) {
+    public void addMessage(@RequestBody Message message) {
         message.setTimestamp(LocalDateTime.now());
         messageRepository.saveAndFlush(message);
     }

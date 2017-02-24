@@ -19,24 +19,26 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID")
-    @JsonIgnore
+    @JsonView({ViewProfiles.UserView.class, ViewProfiles.MessagePost.class})
     private long id;
     @Column(name = "login", unique = true, nullable = false)
     @NotNull
     @Size(min = 3, max = 20)
+    @JsonView({ViewProfiles.UserPost.class, ViewProfiles.UserView.class})
     private String login;
     @Column(name = "name")
-    @JsonView(ViewProfiles.MessageView.class)
     @NotNull
     @Size(min = 3, max = 30)
+    @JsonView({ViewProfiles.MessageView.class, ViewProfiles.UserPost.class, ViewProfiles.UserView.class})
     private String name;
     @Column(name = "mail", unique = true, nullable = false)
     @NotNull
     @Pattern(regexp = "\\w+[\\-]?\\w+@\\w+[\\.{1}\\w+]+")
+    @JsonView({ViewProfiles.UserPost.class, ViewProfiles.UserView.class})
     private String mail;
     @Column(name = "pwd", nullable = false)
     @NotNull
-    @JsonIgnore
+    @JsonView(ViewProfiles.UserPost.class)
     private String pwd;
     @OneToMany(mappedBy = "user")
     @OrderColumn(name = "timestamp")

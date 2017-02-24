@@ -1,5 +1,7 @@
 package com.minichat.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import com.minichat.helpers.ViewProfiles;
 import com.minichat.models.User;
 import com.minichat.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,7 @@ public class UsersController {
         this.userRepository = userRepository;
     }
 
+    @JsonView(ViewProfiles.UserView.class)
     @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<User>> getAll() {
         List<User> users = userRepository.findAll();
@@ -33,6 +36,7 @@ public class UsersController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
+    @JsonView(ViewProfiles.UserView.class)
     @RequestMapping(value = "{login}", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<?> getUserByLogin(@PathVariable String login) {
         User user = userRepository.findUserByLogin(login);
@@ -43,8 +47,10 @@ public class UsersController {
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
+    @JsonView(ViewProfiles.UserPost.class)
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<?> addUser(@RequestBody @Valid User user, Errors errors, UriComponentsBuilder ucBuilder) {
+        System.out.println(user.getPwd());
         if (errors.hasErrors()) {
             return new ResponseEntity<Object>(errors.toString(), HttpStatus.BAD_REQUEST);
         }

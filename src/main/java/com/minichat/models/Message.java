@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import com.minichat.helpers.ViewProfiles;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,12 +23,12 @@ public class Message {
     private User user;
     @Column(name = "timestamp")
     @JsonView(ViewProfiles.MessageView.class)
-    private LocalDateTime timestamp;
+    private Timestamp timestamp;
 
     public Message() {
     }
 
-    public Message(String messageText, User user, LocalDateTime timestamp) {
+    public Message(String messageText, User user, Timestamp timestamp) {
         this.messageText = messageText;
         this.user = user;
         this.timestamp = timestamp;
@@ -57,12 +58,12 @@ public class Message {
         this.user = user;
     }
 
-    public LocalDateTime getTimestamp() {
+    public Timestamp getTimestamp() {
         return timestamp;
     }
 
     public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+        this.timestamp = Timestamp.valueOf(timestamp);
     }
 
     @Override

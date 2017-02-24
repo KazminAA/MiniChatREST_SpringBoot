@@ -6,4 +6,16 @@ package com.minichat.helpers;
 public class ViewProfiles {
     public interface MessageView {
     }
+
+    public interface MessagePost {
+    }
+
+    public interface UserPost {
+    }
+
+    public interface UserView {
+    }
+
+    public interface MessageViewPost extends MessageView, MessagePost {
+    }
 }
