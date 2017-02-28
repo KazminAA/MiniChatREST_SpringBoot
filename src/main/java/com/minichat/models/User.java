@@ -42,7 +42,7 @@ public class User {
     private String pwd;
     @OneToMany(mappedBy = "user")
     @OrderColumn(name = "timestamp")
-    @JsonIgnore
+    @JsonView(ViewProfiles.ViewUserMesssages.class)
     private Collection<Message> messages;
 
     public User() {

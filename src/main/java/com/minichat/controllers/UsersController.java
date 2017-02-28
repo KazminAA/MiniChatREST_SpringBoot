@@ -44,19 +44,18 @@ public class UsersController {
             String error = String.format("User with login %s not found", login);
             return new ResponseEntity(error, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<User>(user, HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @JsonView(ViewProfiles.UserPost.class)
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     public ResponseEntity<?> addUser(@RequestBody @Valid User user, Errors errors, UriComponentsBuilder ucBuilder) {
-        System.out.println(user.getPwd());
         if (errors.hasErrors()) {
-            return new ResponseEntity<Object>(errors.toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(errors.toString(), HttpStatus.BAD_REQUEST);
         }
         userRepository.saveAndFlush(user);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ucBuilder.path("/users/{login}").buildAndExpand(user.getLogin()).toUri());
-        return new ResponseEntity<String>(httpHeaders, HttpStatus.CREATED);
+        return new ResponseEntity<HttpHeaders>(httpHeaders, HttpStatus.CREATED);
     }
 }

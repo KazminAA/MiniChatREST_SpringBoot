@@ -51,7 +51,7 @@ public class JPAConfig {
         hikariConfig.addDataSourceProperty("dataSource.characterEncoding", "utf-8");
 
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
-        return (DataSource) dataSource;
+        return dataSource;
     }
 
     @Bean

@@ -16,6 +16,10 @@ public class ViewProfiles {
     public interface UserView {
     }
 
+    public interface ViewUserMesssages {
+
+    }
+
     public interface MessageViewPost extends MessageView, MessagePost {
     }
 }
