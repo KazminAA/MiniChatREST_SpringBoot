@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -49,10 +48,8 @@ public class UsersController {
 
     @JsonView(ViewProfiles.UserPost.class)
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<?> addUser(@RequestBody @Valid User user, Errors errors, UriComponentsBuilder ucBuilder) {
-        if (errors.hasErrors()) {
-            return new ResponseEntity<>(errors.toString(), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<?> addUser(@RequestBody @Valid User user, UriComponentsBuilder ucBuilder) {
+        System.out.println("Fuck off!");
         userRepository.saveAndFlush(user);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ucBuilder.path("/users/{login}").buildAndExpand(user.getLogin()).toUri());

@@ -9,7 +9,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -47,13 +46,13 @@ public class UsersControllerTest {
 
     @Test
     public void get204StatusTest_NoUsersInDatabase() throws Exception {
-        Mockito.when(userRepository.findAll()).thenReturn(new ArrayList<>());
+        when(userRepository.findAll()).thenReturn(new ArrayList<>());
         mockMvc.perform(get("/users")).andExpect(status().isNoContent());
     }
 
     @Test
     public void correctGetTest_Status_MediaType_ReturnedObjects() throws Exception {
-        Mockito.when(userRepository.findAll()).thenReturn(createUsersList(2));
+        when(userRepository.findAll()).thenReturn(createUsersList(2));
         mockMvc.perform(get("/users")).andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -67,6 +66,27 @@ public class UsersControllerTest {
                 .andExpect(jsonPath("$[1].mail", is("mail1@mail.ru")));
 
         verify(userRepository, times(1)).findAll();
+        verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    public void userByLogin_NotFound() throws Exception {
+        when(userRepository.findUserByLogin("test")).thenReturn(null);
+        mockMvc.perform(get("/users/test")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void userByLogin_Correct_Status_MedisType_ReturnedObject() throws Exception {
+        when(userRepository.findUserByLogin("existingUser")).thenReturn(
+                userBuilder.withId(33).withLogin("existingUser").withName("User1").build()
+        );
+        mockMvc.perform(get("/users/existingUser")).andExpect(status().isOk())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.id", is(33)))
+                .andExpect(jsonPath("$.login", is("existingUser")))
+                .andExpect(jsonPath("$.name", is("User1")));
+
+        verify(userRepository, times(1)).findUserByLogin("existingUser");
         verifyNoMoreInteractions(userRepository);
     }
 
