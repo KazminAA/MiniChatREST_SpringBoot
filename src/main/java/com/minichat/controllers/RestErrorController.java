@@ -19,8 +19,12 @@ import java.util.Locale;
 @ControllerAdvice
 public class RestErrorController {
 
+    private MessageSource messageSource;
+
     @Autowired
-    MessageSource messageSource;
+    public RestErrorController(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -34,7 +38,6 @@ public class RestErrorController {
     private ValidationError processFieldErrors(List<FieldError> fieldErrors) {
         ValidationError validationError = new ValidationError();
         for (FieldError fieldError : fieldErrors) {
-            System.out.println(fieldError.getField() + " " + fieldError.getDefaultMessage());
             String localizedError = resolveLocalizedErrorMessage(fieldError);
             validationError.addFieldError(fieldError.getField(), localizedError);
         }

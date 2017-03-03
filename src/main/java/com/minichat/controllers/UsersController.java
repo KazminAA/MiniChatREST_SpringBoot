@@ -48,11 +48,11 @@ public class UsersController {
 
     @JsonView(ViewProfiles.UserPost.class)
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public ResponseEntity<?> addUser(@RequestBody @Valid User user, UriComponentsBuilder ucBuilder) {
-        System.out.println("Fuck off!");
+    @ResponseStatus(HttpStatus.CREATED)
+    public HttpHeaders addUser(@RequestBody @Valid User user, UriComponentsBuilder ucBuilder) {
         userRepository.saveAndFlush(user);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ucBuilder.path("/users/{login}").buildAndExpand(user.getLogin()).toUri());
-        return new ResponseEntity<HttpHeaders>(httpHeaders, HttpStatus.CREATED);
+        return httpHeaders;
     }
 }
