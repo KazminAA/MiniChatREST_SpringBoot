@@ -1,6 +1,5 @@
-package com.minichat.controllers;
+package com.minichat.helpers;
 
-import com.minichat.helpers.ValidationError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -17,12 +16,12 @@ import java.util.List;
 import java.util.Locale;
 
 @ControllerAdvice
-public class RestErrorController {
+public class ValidationErrorHandler {
 
     private MessageSource messageSource;
 
     @Autowired
-    public RestErrorController(MessageSource messageSource) {
+    public ValidationErrorHandler(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
 
