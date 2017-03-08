@@ -1,8 +1,6 @@
 package com.minichat;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.minichat.builders.UserBuilder;
 import com.minichat.controllers.UsersController;
 import com.minichat.helpers.ViewProfiles;
@@ -14,15 +12,14 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
@@ -30,6 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,20 +40,16 @@ public class UsersControllerTest {
     @InjectMocks
     private UsersController usersController;
 
-    private MockMvc mockMvc;
-    private UserBuilder userBuilder;
+    @Autowired
+    private WebApplicationContext wac;
 
-    public byte[] getObjectAsJsonBytes(Object object) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        return mapper.writeValueAsBytes(object);
-    }
+    private MockMvc mockMvc;
+    private UserBuilder userBuilder = new UserBuilder();
 
     @Before
     public void setup() {
         MockitoAnnotations.initMocks(this);
         this.mockMvc = standaloneSetup(usersController).build();
-        userBuilder = new UserBuilder();
     }
 
     @Test
@@ -66,7 +60,7 @@ public class UsersControllerTest {
 
     @Test
     public void correctGetTest_Status_MediaType_ReturnedObjects() throws Exception {
-        when(userRepository.findAll()).thenReturn(createUsersList(2));
+        when(userRepository.findAll()).thenReturn(TestsHelpers.createUsersList(2));
         mockMvc.perform(get("/users")).andExpect(status().isOk())
                 .andExpect(content().contentType("application/json;charset=UTF-8"))
                 .andExpect(jsonPath("$", hasSize(2)))
@@ -107,18 +101,19 @@ public class UsersControllerTest {
     @Test
     @JsonView(ViewProfiles.UserPost.class)
     public void add_userLoginTooShortAndPwdIsNull_ShouldReturnValidationErrorsForLoginAndPwd() throws Exception {
-        User user = userBuilder.withLogin("pi").build();
+        this.mockMvc = webAppContextSetup(this.wac).build();
+        User user = userBuilder.withLogin("pi").withPwd(null).build();
         mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getObjectAsJsonBytes(user))
+                .contentType("application/json")
+                .content(TestsHelpers.getObjectAsJsonBytes(user))
         )
-                /*.andExpect(status().isBadRequest())
-                .andExpect(content().contentType("application/json;charset=UTF-8"))*/
-                /*.andExpect(jsonPath("$.fieldErrors", hasSize(2)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType("application/json;charset=UTF-8"))
+                .andExpect(jsonPath("$.fieldErrors", hasSize(2)))
                 .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("pwd", "login")))
                 .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
                         "may not be null", "size must be between 3 and 20"
-                )))*/;
+                )));
         verifyZeroInteractions(userRepository);
     }
 
@@ -127,33 +122,12 @@ public class UsersControllerTest {
     public void add_createSuccessful_ShouldReturnLocationToCreatedUser() throws Exception {
         User user = userBuilder.withLogin("pix").build();
         mockMvc.perform(post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getObjectAsJsonBytes(user))
+                .contentType("application/json")
+                .content(TestsHelpers.getObjectAsJsonBytes(user))
         )
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", containsString("http://localhost/users/pix")))
-                /*.andExpect(jsonPath("$.fieldErrors", hasSize(2)))
-                .andExpect(jsonPath("$.fieldErrors[*].field", containsInAnyOrder("pwd", "login")))
-                .andExpect(jsonPath("$.fieldErrors[*].message", containsInAnyOrder(
-                        "may not be null", "size must be between 3 and 20"
-                )))*/;
+                .andExpect(header().string("Location", containsString("http://localhost/users/pix")));
         verify(userRepository, times(1)).saveAndFlush(user);
         verifyNoMoreInteractions(userRepository);
-    }
-
-    private List<User> createUsersList(int count) {
-        List<User> users = new ArrayList<>();
-        User user;
-        for (int i = 0; i < count; i++) {
-            user = userBuilder
-                    .withId(i)
-                    .withLogin("login" + i)
-                    .withName("name" + i)
-                    .withMail("mail" + i + "@mail.ru")
-                    .build();
-            user.setId(i);
-            users.add(user);
-        }
-        return users;
     }
 }

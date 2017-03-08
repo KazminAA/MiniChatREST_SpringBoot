@@ -62,8 +62,12 @@ public class Message {
         return timestamp;
     }
 
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
     public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = Timestamp.valueOf(timestamp);
+        this.timestamp = (timestamp != null) ? Timestamp.valueOf(timestamp) : null;
     }
 
     @Override

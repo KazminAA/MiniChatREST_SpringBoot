@@ -7,7 +7,10 @@ import com.minichat.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -37,8 +40,12 @@ public class MessagesController {
 
     @JsonView(ViewProfiles.MessageViewPost.class)
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
-    public void addMessage(@RequestBody Message message) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public HttpHeaders addMessage(@RequestBody Message message, UriComponentsBuilder ucBuilder) {
         message.setTimestamp(LocalDateTime.now());
         messageRepository.saveAndFlush(message);
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setLocation(ucBuilder.path("/messages").build().toUri());
+        return httpHeaders;
     }
 }
