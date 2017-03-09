@@ -3,7 +3,6 @@ package com.minichat.builders;
 import com.minichat.models.Message;
 import com.minichat.models.User;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 /**
@@ -13,7 +12,7 @@ public class MessageBuilder {
     private long id = 1;
     private String messageText = "Test message";
     private User user = new UserBuilder().build();
-    private Timestamp timestamp = Timestamp.valueOf(LocalDateTime.of(1900, 1, 1, 1, 1));
+    private LocalDateTime timestamp = LocalDateTime.of(1900, 1, 1, 1, 1);
 
     public MessageBuilder withId(long id) {
         this.id = id;
@@ -42,7 +41,7 @@ public class MessageBuilder {
     }
 
     public MessageBuilder withTime(LocalDateTime time) {
-        timestamp = Timestamp.valueOf(time);
+        timestamp = time;
         return this;
     }
 

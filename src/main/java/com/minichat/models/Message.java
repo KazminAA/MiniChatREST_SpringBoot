@@ -1,10 +1,11 @@
 package com.minichat.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.minichat.helpers.LocalDateTimeAttributeConverter;
 import com.minichat.helpers.ViewProfiles;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,12 +24,14 @@ public class Message {
     private User user;
     @Column(name = "timestamp")
     @JsonView(ViewProfiles.MessageView.class)
-    private Timestamp timestamp;
+    @Convert(converter = LocalDateTimeAttributeConverter.class)
+    @JsonFormat(pattern = "dd-MM-yyyy' 'HH:mm:ss")
+    private LocalDateTime timestamp;
 
     public Message() {
     }
 
-    public Message(String messageText, User user, Timestamp timestamp) {
+    public Message(String messageText, User user, LocalDateTime timestamp) {
         this.messageText = messageText;
         this.user = user;
         this.timestamp = timestamp;
@@ -58,11 +61,11 @@ public class Message {
         this.user = user;
     }
 
-    public Timestamp getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 
