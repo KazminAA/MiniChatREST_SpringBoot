@@ -17,7 +17,6 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-/*@EnableWebMvc*/
 @EnableAutoConfiguration(exclude = {
         org.springframework.boot.autoconfigure.security.SecurityAutoConfiguration.class})
 @ComponentScan(basePackages = {"com.minichat"})
@@ -27,8 +26,12 @@ import java.util.Properties;
 @PropertySource("classpath:/application.properties")
 public class JPAConfig {
 
-    @Autowired
     private Environment env;
+
+    @Autowired
+    public JPAConfig(Environment env) {
+        this.env = env;
+    }
 
     @Bean(destroyMethod = "close")
     public DataSource configureDataSource() {

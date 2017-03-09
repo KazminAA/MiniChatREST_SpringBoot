@@ -22,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
@@ -84,6 +85,7 @@ public class MessagesControllerTest {
         mvc.perform(post("/messages")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestsHelpers.getObjectAsJsonBytes(message)))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isCreated())
+                .andExpect(header().string("Location", containsString("http://localhost/messages")));
     }
 }

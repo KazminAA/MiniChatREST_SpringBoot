@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class MessagesController {
     @RequestMapping(method = RequestMethod.POST, consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public HttpHeaders addMessage(@RequestBody Message message, UriComponentsBuilder ucBuilder) {
-        message.setTimestamp(LocalDateTime.now());
+        message.setTimestamp(Timestamp.valueOf(LocalDateTime.now()));
         messageRepository.saveAndFlush(message);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setLocation(ucBuilder.path("/messages").build().toUri());

@@ -66,10 +66,6 @@ public class Message {
         this.timestamp = timestamp;
     }
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = (timestamp != null) ? Timestamp.valueOf(timestamp) : null;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

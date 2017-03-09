@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -104,7 +105,7 @@ public class UsersControllerTest {
         this.mockMvc = webAppContextSetup(this.wac).build();
         User user = userBuilder.withLogin("pi").withPwd(null).build();
         mockMvc.perform(post("/users")
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(TestsHelpers.getObjectAsJsonBytes(user))
         )
                 .andExpect(status().isBadRequest())
@@ -122,7 +123,7 @@ public class UsersControllerTest {
     public void add_createSuccessful_ShouldReturnLocationToCreatedUser() throws Exception {
         User user = userBuilder.withLogin("pix").build();
         mockMvc.perform(post("/users")
-                .contentType("application/json")
+                .contentType(MediaType.APPLICATION_JSON)
                 .content(TestsHelpers.getObjectAsJsonBytes(user))
         )
                 .andExpect(status().isCreated())
