@@ -20,11 +20,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.time.LocalDateTime;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -81,7 +77,7 @@ public class MessagesControllerTest {
 
     @Test
     public void postMethodTest() throws Exception {
-        Message message = messageBuilder.withTime(LocalDateTime.now()).build();
+        Message message = messageBuilder.withTime(null).build();
         mvc.perform(post("/messages")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(TestsHelpers.getObjectAsJsonBytes(message)))

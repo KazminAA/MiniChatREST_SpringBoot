@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <user id="12"
+          login="user1"
+          name="User1"
+          mail="mail1@mail.ru"
+          pwd="1"/>
+
+    <user id="13"
+          login="user2"
+          name="User2"
+          mail="mail2@mail.ru"
+          pwd="2"/>
+
+    <user id="14"
+          login="user3"
+          name="User3"
+          mail="mail3@mail.ru"
+          pwd="3"/>
+</dataset>

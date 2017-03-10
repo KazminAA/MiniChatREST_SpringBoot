@@ -34,7 +34,7 @@ public class JPAConfig {
     }
 
     @Bean(destroyMethod = "close")
-    public DataSource configureDataSource() {
+    public DataSource dataSource() {
 
         HikariConfig hikariConfig = new HikariConfig();
 
