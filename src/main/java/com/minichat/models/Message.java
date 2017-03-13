@@ -18,7 +18,7 @@ public class Message {
     @Column(name = "messtext")
     @JsonView(ViewProfiles.MessageView.class)
     private String messageText;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.DETACH})
     @JoinColumn(name = "user_ID", referencedColumnName = "ID")
     @JsonView(ViewProfiles.MessageView.class)
     private User user;

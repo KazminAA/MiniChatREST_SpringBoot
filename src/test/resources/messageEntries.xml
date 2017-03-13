@@ -1,0 +1,35 @@
+<dataset>
+    <user id="12"
+          login="user1"
+          name="User1"
+          mail="mail1@mail.ru"
+          pwd="1"/>
+
+    <user id="13"
+          login="user2"
+          name="User2"
+          mail="mail2@mail.ru"
+          pwd="2"/>
+
+    <user id="14"
+          login="user3"
+          name="User3"
+          mail="mail3@mail.ru"
+          pwd="3"/>
+    <messages id="1"
+              messtext="Hello!"
+              user_ID="12"
+              timestamp="2017-03-13 13:18:04"/>
+    <messages id="2"
+              messtext="Hi! Maybe we'll speak russian?"
+              user_ID="14"
+              timestamp="2017-03-13 13:18:25"/>
+    <messages id="3"
+              messtext="Давай"
+              user_ID="12"
+              timestamp="2017-03-13 13:18:56"/>
+    <messages id="4"
+              messtext="Я не против."
+              user_ID="13"
+              timestamp="2017-03-13 13:20:22"/>
+</dataset>

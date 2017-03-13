@@ -1,18 +1,21 @@
 package com.minichat;
 
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
-import com.github.springtestdbunit.annotation.DatabaseOperation;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import com.minichat.builders.MessageBuilder;
 import com.minichat.builders.UserBuilder;
 import com.minichat.configs.JPAConfig;
+import com.minichat.models.Message;
 import com.minichat.models.User;
-import com.minichat.repositories.UserRepository;
+import com.minichat.repositories.MessageRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -30,25 +33,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
         TransactionalTestExecutionListener.class,
         DbUnitTestExecutionListener.class})
-@DatabaseSetup(value = "classpath:messageEntries.xml", type = DatabaseOperation.CLEAN_INSERT)
-public class UserJpaTests {
+@DatabaseSetup(value = "classpath:messageEntries.xml")
+public class MessageJPATest {
 
     @Autowired
-    UserRepository userRepository;
+    MessageRepository messageRepository;
 
     @Test
-    public void findAllTest_ShouldReturn3Entries() {
-        List<User> users = userRepository.findAll();
-        assertThat(users).hasSize(3);
-        User found1 = users.get(1);
-        assertThat(found1.getId()).isEqualTo(13);
+    public void findLast20MessagesSuccessfully() {
+        PageRequest request = new PageRequest(0, 20, Sort.Direction.DESC, "id");
+        List<Message> messageList = messageRepository.findWithPageable(request);
+        assertThat(messageList).hasSize(4);
+        Message message = messageList.get(1);
+        assertThat(message.getMessageText()).contains("Давай");
     }
 
     @Test
-    public void addUserSuccessfulll() {
-        User user = new UserBuilder().withId(0).build();
-        assertThat(user.getId() == 0);
-        userRepository.saveAndFlush(user);
-        assertThat(user.getId() != 0);
+    public void addNewMessageSuccessfully() {
+        User user = new UserBuilder().withId(12).build();
+        Message message = new MessageBuilder().withId(0).withUser(user).build();
+        assertThat(message.getId() == 0);
+        messageRepository.saveAndFlush(message);
+        assertThat(message.getId() != 0);
     }
 }

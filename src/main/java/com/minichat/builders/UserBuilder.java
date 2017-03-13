@@ -6,7 +6,7 @@ public class UserBuilder {
     private long id = 1;
     private String login = "login1";
     private String name = "name1";
-    private String mail = "mail1@mail.ru";
+    private String mail = "testmail@mail.ru";
     private String pwd = "1111";
 
     public UserBuilder withId(long id) {

@@ -40,7 +40,7 @@ public class User {
     @NotNull
     @JsonView(ViewProfiles.UserPost.class)
     private String pwd;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     @OrderColumn(name = "timestamp")
     @JsonView(ViewProfiles.ViewUserMesssages.class)
     private Collection<Message> messages;

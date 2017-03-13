@@ -5,9 +5,6 @@ import com.minichat.models.User;
 
 import java.time.LocalDateTime;
 
-/**
- * Created by Alexandr on 28.02.2017.
- */
 public class MessageBuilder {
     private long id = 1;
     private String messageText = "Test message";
